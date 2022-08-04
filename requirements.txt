@@ -1,0 +1,16 @@
+# opencv-python-headless<4.3
+# albumentations
+# matplotlib
+simplejson
+# numpy
+# opencv_python==4.5.4.60
+# photutils
+# scipy
+torch
+# pyquaternion
+# tqdm
+# pyrr
+Pillow
+# torchvision
+PyYAML
+# tensorboardX

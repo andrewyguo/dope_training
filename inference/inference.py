@@ -130,9 +130,7 @@ class DopeNode(object):
                     "class": self.class_name,
                     "location": np.array(loc).tolist(),
                     "quaternion_xyzw": np.array(ori).tolist(),
-                    "projected_cuboid": np.array(
-                        result["projected_points"]
-                    ).tolist(),
+                    "projected_cuboid": np.array(result["projected_points"]).tolist(),
                 }
             )
 
@@ -143,27 +141,20 @@ class DopeNode(object):
                     points2d.append(tuple(pair))
                 draw.draw_cube(points2d, self.draw_color)
 
-
         # create directory to save image if it does not exist
         img_name_base = img_name.split("/")[-1]
         output_path = os.path.join(
-                output_folder,
-                weight.split("/")[-1].replace(".pth", ""),
-                *img_name.split("/")[:-1],
-            )
-        if not os.path.isdir(
-            output_path
-        ):
+            output_folder,
+            weight.split("/")[-1].replace(".pth", ""),
+            *img_name.split("/")[:-1],
+        )
+        if not os.path.isdir(output_path):
             os.makedirs(output_path, exist_ok=True)
 
-        im.save(os.path.join(
-                output_path,
-                img_name_base
-            ))
+        im.save(os.path.join(output_path, img_name_base))
 
         json_path = os.path.join(
-                output_path,
-                ".".join(img_name_base.split('.')[:-1]) + ".json"
+            output_path, ".".join(img_name_base.split(".")[:-1]) + ".json"
         )
         # save the json files
         with open(json_path, "w") as fp:
@@ -227,12 +218,7 @@ if __name__ == "__main__":
     with open(opt.camera) as f:
         camera_info = yaml.load(f, Loader=yaml.FullLoader)
 
-    # create the output folder
-    print(f"output is located in {opt.outf}")
-    # try:
-    #     shutil.rmtree(f"{opt.outf}")
-    # except:
-    #     pass
+    os.makedirs(opt.outf, exist_ok=True)
 
     # Load model weights
     weights = loadweights(opt.weights)
@@ -253,11 +239,11 @@ if __name__ == "__main__":
         )
         exit()
 
-    for weight in weights:
+    for w_i, weight in enumerate(weights):
         dope_node = DopeNode(config, weight, opt.class_name)
 
         for i in range(len(imgs)):
-            print(f"frame {i + 1} of {len(imgs)}: {imgsname[i]}")
+            print(f"({w_i + 1} of  {len(weights)}) frame {i + 1} of {len(imgs)}: {imgsname[i]}")
             img_name = imgsname[i]
 
             frame = cv2.imread(imgs[i])
@@ -272,5 +258,5 @@ if __name__ == "__main__":
                 output_folder=opt.outf,
                 weight=weight,
             )
-        
+
         print("------")

@@ -213,8 +213,9 @@ class CleanVisiiDopeLoader(data.Dataset):
 
                 for img in imgs:
                     self.imgs.append(
-                        (img, bucket, img[:-3] + "json")
-                    )  # (img key, bucket name, json key)
+                        # (img key, bucket name, json key)
+                        (img, bucket, img[:-3] + "json") 
+                    )  
 
         else:
             for path_look in path_dataset:
@@ -340,7 +341,6 @@ class CleanVisiiDopeLoader(data.Dataset):
         transformed = transform(image=img, keypoints=flatten_projected_cuboid)
         img_transformed = transformed["image"]
         flatten_projected_cuboid_transformed = transformed["keypoints"]
-        # img_transformed[:,:,3] = 255
 
         #######
 
@@ -375,7 +375,6 @@ class CleanVisiiDopeLoader(data.Dataset):
                     (int(p[0]) - 2, int(p[1]) - 2, int(p[0]) + 2, int(p[1]) + 2),
                     fill="green",
                 )
-                # draw.text((p[0]*2+4, p[1]*2+4),str(ip),'green',font=font)
 
             img_transformed_saving.save(
                 f"debug/{img_name.replace('.png','_transformed.png')}"
@@ -402,14 +401,12 @@ class CleanVisiiDopeLoader(data.Dataset):
         )
         beliefs = torch.from_numpy(np.array(beliefs))
         # generate affinity fields with centroid.
-        # def GenerateMapAffinity(img,nb_vertex,pointsInterest,objects_centroid,scale):
         affinities = GenerateMapAffinity(
             size=int(self.output_size),
             nb_vertex=8,
             pointsInterest=all_projected_cuboid_keypoints,
             objects_centroid=np.array(all_projected_cuboid_keypoints)[:, -1].tolist(),
             scale=1,
-            # save = True,
         )
 
         # prepare for the image tensors
@@ -480,17 +477,16 @@ def VisualizeAffinityMap(
 ):
     images = torch.zeros(tensor.shape[0] // 2, 3, tensor.shape[1], tensor.shape[2])
     for i_image in range(0, tensor.shape[0], 2):  # could be read as i_keypoint
-        # for i in range(tensor.shape[1]):
-        # for j in range(tensor.shape[2]):
+
         indices = (
             torch.abs(tensor[i_image, :, :]) + torch.abs(tensor[i_image + 1, :, :])
             > threshold_norm_vector
         ).nonzero()
-        # print(indices)
+
         for indice in indices:
-            # print (indice)
+
             i, j = indice
-            # print(tensor[i,j,i_image,0].item())
+
             angle_vector = np.array([tensor[i_image, i, j], tensor[i_image + 1, i, j]])
             if length(angle_vector) > threshold_norm_vector:
                 angle = py_ang(angle_vector)
@@ -501,7 +497,7 @@ def VisualizeAffinityMap(
                 images[i_image // 2, i_c, i, j] = c[i_c]
         if not points is None:
             point = points[i_image // 2]
-            # print (images.shape)
+
             print(
                 int(point[1] * factor + translation[1]),
                 int(point[0] * factor + translation[0]),
@@ -515,7 +511,6 @@ def VisualizeAffinityMap(
                 int(point[0] * factor + translation[0])
                 - 1 : int(point[0] * factor + translation[0])
                 + 1,
-                # int(point[0])-1:int(point[0])+1
             ] = 1
 
     return images
@@ -567,7 +562,7 @@ def GenerateMapAffinity(
         center = objects_centroid[i_pointsImage]
         for i_points in range(nb_vertex):
             point = pointsImage[i_points]
-            # print (pointsImage[i_points])
+
             affinity_pair, img_affinity = getAfinityCenter(
                 int(size / scale),
                 int(size / scale),
@@ -577,7 +572,6 @@ def GenerateMapAffinity(
                 radius=1,
             )
 
-            # affinities[i_points] = (affinities[i_points] + affinity_pair)
             affinities[i_points] = (affinities[i_points] + affinity_pair) / 2
 
             # Normalizing
@@ -595,7 +589,6 @@ def GenerateMapAffinity(
             affinities[i_points] = torch.from_numpy(np.concatenate([[xvec], [yvec]]))
     affinities = torch.cat(affinities, 0)
 
-    # img_affinity.save('aff.png')
     return affinities
 
 
@@ -611,7 +604,6 @@ def getAfinityCenter(
     # create the canvas for the afinity output
     imgAffinity = Image.new("RGB", (width, height), "black")
     totensor = transforms.Compose([transforms.ToTensor()])
-    # raise()
     draw = ImageDraw.Draw(imgAffinity)
     r1 = radius
     p = point
@@ -626,15 +618,12 @@ def getAfinityCenter(
     angle_vector = normalize(angle_vector)
     affinity = np.concatenate([[array * angle_vector[0]], [array * angle_vector[1]]])
 
-    # print (tensor)
     if not img_affinity is None:
         # find the angle vector
-        # print (angle_vector)
         if length(angle_vector) > 0:
             angle = py_ang(angle_vector)
         else:
             angle = 0
-        # print(angle)
         c = np.array(colorsys.hsv_to_rgb(angle / 360, 1, 1)) * 255
         draw = ImageDraw.Draw(img_affinity)
         draw.ellipse(
@@ -649,8 +638,6 @@ def getAfinityCenter(
 def CreateBeliefMap(size, pointsBelief, nbpoints, sigma=16, save=False):
     # Create the belief maps in the points
     beliefsImg = []
-    # sigma = sigma
-    # print(img.shape)
     for numb_point in range(nbpoints):
         array = np.zeros([size, size])
         out = np.zeros([size, size])
@@ -739,7 +726,6 @@ class AddNoise(object):
 
     def __call__(self, tensor):
         # TODO: make efficient
-        # t = torch.FloatTensor(tensor.size()).uniform_(self.min,self.max)
         t = torch.FloatTensor(tensor.size()).normal_(0, self.std)
 
         t = tensor.add(t)
