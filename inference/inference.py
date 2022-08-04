@@ -243,7 +243,9 @@ if __name__ == "__main__":
         dope_node = DopeNode(config, weight, opt.class_name)
 
         for i in range(len(imgs)):
-            print(f"({w_i + 1} of  {len(weights)}) frame {i + 1} of {len(imgs)}: {imgsname[i]}")
+            print(
+                f"({w_i + 1} of  {len(weights)}) frame {i + 1} of {len(imgs)}: {imgsname[i]}"
+            )
             img_name = imgsname[i]
 
             frame = cv2.imread(imgs[i])

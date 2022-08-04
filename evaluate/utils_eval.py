@@ -55,13 +55,13 @@ def create_obj(
 create_obj.meshes = {}
 create_obj.textures = {}
 
+
 def add_cuboid(name, debug=False):
     obj = visii.entity.get(name)
 
     min_obj = obj.get_mesh().get_min_aabb_corner()
     max_obj = obj.get_mesh().get_max_aabb_corner()
     centroid_obj = obj.get_mesh().get_aabb_center()
-
 
     cuboid = [
         visii.vec3(max_obj[0], max_obj[1], max_obj[2]),
@@ -72,34 +72,40 @@ def add_cuboid(name, debug=False):
         visii.vec3(max_obj[0], min_obj[1], min_obj[2]),
         visii.vec3(min_obj[0], max_obj[1], min_obj[2]),
         visii.vec3(min_obj[0], min_obj[1], min_obj[2]),
-        visii.vec3(centroid_obj[0], centroid_obj[1], centroid_obj[2]), 
+        visii.vec3(centroid_obj[0], centroid_obj[1], centroid_obj[2]),
     ]
 
     # change the ids to be like ndds / DOPE
-    cuboid = [  cuboid[2],cuboid[0],cuboid[3],
-                cuboid[5],cuboid[4],cuboid[1],
-                cuboid[6],cuboid[7],cuboid[-1]]
+    cuboid = [
+        cuboid[2],
+        cuboid[0],
+        cuboid[3],
+        cuboid[5],
+        cuboid[4],
+        cuboid[1],
+        cuboid[6],
+        cuboid[7],
+        cuboid[-1],
+    ]
 
     cuboid.append(visii.vec3(centroid_obj[0], centroid_obj[1], centroid_obj[2]))
-        
+
     for i_p, p in enumerate(cuboid):
         child_transform = visii.transform.create(f"{name}_cuboid_{i_p}")
         child_transform.set_position(p)
         child_transform.set_scale(visii.vec3(0.3))
         child_transform.set_parent(obj.get_transform())
-        if debug: 
+        if debug:
             visii.entity.create(
-                name = f"{name}_cuboid_{i_p}",
-                mesh = visii.mesh.create_sphere(f"{name}_cuboid_{i_p}"),
-                transform = child_transform, 
-                material = visii.material.create(f"{name}_cuboid_{i_p}")
+                name=f"{name}_cuboid_{i_p}",
+                mesh=visii.mesh.create_sphere(f"{name}_cuboid_{i_p}"),
+                transform=child_transform,
+                material=visii.material.create(f"{name}_cuboid_{i_p}"),
             )
-    
+
     for i_v, v in enumerate(cuboid):
-        cuboid[i_v]=[v[0], v[1], v[2]]
+        cuboid[i_v] = [v[0], v[1], v[2]]
 
-
-     
     return cuboid
 
 
@@ -135,7 +141,7 @@ def loadmodels(root, cuboid, suffix=""):
                     scale=0.01,
                 )
 
-                if cuboid: 
+                if cuboid:
                     add_cuboid(model_name + suffix)
 
                 if "gu" in suffix:

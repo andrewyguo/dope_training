@@ -124,7 +124,7 @@ if __name__ == "__main__":
     print(f"Number of Ground Truth Data : {len(data_truth)}")
     print(f"Number of Prediction Folders: {len(prediction_folders)}")
 
-    # Thresholds for ADD Calculations 
+    # Thresholds for ADD Calculations
     thresholds = [0.02, 0.04, 0.06, 0.08, 0.10]
 
     # Make output directory if it does not exist
@@ -149,8 +149,10 @@ if __name__ == "__main__":
         count_by_object_preds = {}
 
         for f_i, gt_file in enumerate(data_truth):
-            
-            print(f"({pf_i + 1} of {len(prediction_folders)}) Computing file {f_i + 1} of {len(data_truth)}")
+
+            print(
+                f"({pf_i + 1} of {len(prediction_folders)}) Computing file {f_i + 1} of {len(data_truth)}"
+            )
 
             gt_json = None
             with open(os.path.join(opt.data, gt_file)) as json_file:
@@ -322,7 +324,7 @@ if __name__ == "__main__":
                             corner_gt = visii.transform.get(
                                 f"{name_gt + '_gt'}_cuboid_{i_p}"
                             )
-      
+
                             corner_gu = visii.transform.get(
                                 f"{name_pred + '_gu'}_cuboid_{i_p}"
                             )
@@ -375,8 +377,9 @@ if __name__ == "__main__":
             )
 
             auc_total = calculate_auc_total(
-                add_list=np.array(adds_objects[name]), total_objects=count_by_object[name]
-            )   
+                add_list=np.array(adds_objects[name]),
+                total_objects=count_by_object[name],
+            )
 
             csv_writer.writerow([pf, name, auc_total] + auc_thresh)
 

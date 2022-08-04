@@ -214,8 +214,8 @@ class CleanVisiiDopeLoader(data.Dataset):
                 for img in imgs:
                     self.imgs.append(
                         # (img key, bucket name, json key)
-                        (img, bucket, img[:-3] + "json") 
-                    )  
+                        (img, bucket, img[:-3] + "json")
+                    )
 
         else:
             for path_look in path_dataset:
