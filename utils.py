@@ -896,7 +896,7 @@ class Draw(object):
             ]
             self.draw.ellipse(xy, fill=point_color, outline=point_color)
 
-    def draw_cube(self, points, color=(0, 0, 255)):
+    def draw_cube(self, points, color=(0, 255, 0)):
         """
         Draws cube with a thick solid line across
         the front top edge and an X on the top face.

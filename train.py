@@ -28,7 +28,7 @@ from tensorboardX import SummaryWriter
 
 
 from models import *
-from dope_training.utils import *
+from utils import *
 
 
 import warnings
