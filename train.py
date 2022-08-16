@@ -58,7 +58,7 @@ conf_parser.add_argument("-c", "--config", help="Specify config file", metavar="
 parser = argparse.ArgumentParser()
 
 # Specify Training Data
-parser.add_argument("--data", nargs="+", help="path to training data")
+parser.add_argument("--data", nargs="+", required=True, help="path to training data")
 parser.add_argument(
     "--use_s3", action="store_true", help="Use s3 buckets for training data"
 )
@@ -84,7 +84,7 @@ parser.add_argument("--batchsize", type=int, default=32, help="input batch size"
 parser.add_argument(
     "--imagesize",
     type=int,
-    default=448,
+    default=512,
     help="the height / width of the input image to network",
 )
 parser.add_argument(
@@ -103,7 +103,7 @@ parser.add_argument(
 )
 parser.add_argument("--manualseed", type=int, help="manual seed")
 parser.add_argument(
-    "--epochs", type=int, default=60, help="Number of epochs to train for"
+    "--epochs", "--epoch", "-e", type=int, default=60, help="Number of epochs to train for"
 )
 parser.add_argument("--loginterval", type=int, default=100)
 parser.add_argument("--gpuids", nargs="+", type=int, default=[0], help="GPUs to use")
@@ -115,7 +115,7 @@ parser.add_argument(
     help="Extensions for images to use. Can have multiple entries seperated by space. e.g. png jpg",
 )
 parser.add_argument(
-    "--outf", default="tmp", help="folder to output images and model checkpoints"
+    "--outf", default="output/tmp", help="folder to output images and model checkpoints"
 )
 parser.add_argument("--sigma", default=4, help="keypoint creation sigma")
 
@@ -142,13 +142,8 @@ parser.add_argument("--option")
 opt = parser.parse_args(remaining_argv)
 
 
-if not "/" in opt.outf:
-    opt.outf = "train_{}".format(opt.outf)
+os.makedirs(opt.outf, exist_ok=True)
 
-try:
-    os.makedirs(opt.outf)
-except OSError:
-    pass
 
 with open(opt.outf + "/header.txt", "w") as file:
     file.write(str(opt) + "\n")
