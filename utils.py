@@ -80,14 +80,18 @@ import colorsys, math
 
 def loadimages(root, extensions=["png"]):
     imgs = []
-    loadimages.extensions = extensions
 
     def add_json_files(
         path,
     ):
-        for ext in loadimages.extensions:
-            for imgpath in glob.glob(path + "/*.{}".format(ext.replace(".", ""))):
-                if exists(imgpath) and exists(imgpath.replace(ext, "json")):
+        for ext in extensions:
+            for file in os.listdir(path):
+                imgpath = os.path.join(path, file)
+                if (
+                    imgpath.endswith(ext)
+                    and exists(imgpath)
+                    and exists(imgpath.replace(ext, "json"))
+                ):
                     imgs.append(
                         (
                             imgpath,
@@ -104,12 +108,11 @@ def loadimages(root, extensions=["png"]):
             for o in os.listdir(path)
             if os.path.isdir(os.path.join(path, o))
         ]
-        if len(folders) > 0:
-            for path_entry in folders:
 
-                explore(path_entry)
-        else:
-            add_json_files(path)
+        for path_entry in folders:
+            explore(path_entry)
+
+        add_json_files(path)
 
     explore(root)
 
@@ -926,3 +929,6 @@ class Draw(object):
         # draw x on the top
         self.draw_line(points[0], points[5], color)
         self.draw_line(points[1], points[4], color)
+
+        # Draw center
+        self.draw_dot(points[8], point_color=color, point_radius=6)
