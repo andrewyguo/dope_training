@@ -1,17 +1,15 @@
 # Debugging Tool to Visualize Synthetic Data Projected Points Accuracy
 
-from PIL import ImageDraw, Image
-import numpy as np
+from PIL import Image
 import json
 
 from utils import Draw, loadimages
 
 import argparse
-import yaml
 import os
 
 
-def debug_cuboid_points(path_img, path_json, path_output, img_name, root):
+def visualize_projected_points(path_img, path_json, path_output, img_name, root):
     img = Image.open(path_img).convert("RGB")
 
     with open(path_json) as f:
@@ -47,7 +45,6 @@ if __name__ == "__main__":
     imgs = loadimages(opt.data)
 
     for i, (img_path, img_name, json_path) in enumerate(imgs):
-        # img_name = img_path.replace(opt.data, "").lstrip("/")
-
-        print(f"Debugging image {img_name} ({i + 1} of {len(imgs)})")
-        debug_cuboid_points(img_path, json_path, opt.outf, img_name, opt.data)
+        img_rel_path = img_path.replace(opt.data, "")
+        print(f"Debugging image {img_rel_path} ({i + 1} of {len(imgs)})")
+        visualize_projected_points(img_path, json_path, opt.outf, img_name, opt.data)
