@@ -166,17 +166,16 @@ def load_groundtruth(root):
             if os.path.isdir(os.path.join(path, o))
         ]
 
-        if len(folders) > 0:
-            for path_entry in folders:
-                explore(path_entry)
-        else:
-            gts.extend(
-                [
-                    os.path.join(path, gt).replace(root, "").lstrip("/")
-                    for gt in os.listdir(path)
-                    if gt.endswith(".json") and not "settings" in gt
-                ]
-            )
+        for path_entry in folders:
+            explore(path_entry)
+
+        gts.extend(
+            [
+                os.path.join(path, gt).replace(root, "").lstrip("/")
+                for gt in os.listdir(path)
+                if gt.endswith(".json") and not "settings" in gt
+            ]
+        )
 
     explore(root)
 

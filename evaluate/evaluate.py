@@ -25,59 +25,6 @@ import csv
 from utils_eval import *
 
 
-def add_cuboid(name, debug=False):
-    obj = visii.entity.get(name)
-
-    min_obj = obj.get_mesh().get_min_aabb_corner()
-    max_obj = obj.get_mesh().get_max_aabb_corner()
-    centroid_obj = obj.get_mesh().get_aabb_center()
-
-    cuboid = [
-        visii.vec3(max_obj[0], max_obj[1], max_obj[2]),
-        visii.vec3(min_obj[0], max_obj[1], max_obj[2]),
-        visii.vec3(max_obj[0], min_obj[1], max_obj[2]),
-        visii.vec3(max_obj[0], max_obj[1], min_obj[2]),
-        visii.vec3(min_obj[0], min_obj[1], max_obj[2]),
-        visii.vec3(max_obj[0], min_obj[1], min_obj[2]),
-        visii.vec3(min_obj[0], max_obj[1], min_obj[2]),
-        visii.vec3(min_obj[0], min_obj[1], min_obj[2]),
-        visii.vec3(centroid_obj[0], centroid_obj[1], centroid_obj[2]),
-    ]
-
-    # change the ids to be like ndds / DOPE
-    cuboid = [
-        cuboid[2],
-        cuboid[0],
-        cuboid[3],
-        cuboid[5],
-        cuboid[4],
-        cuboid[1],
-        cuboid[6],
-        cuboid[7],
-        cuboid[-1],
-    ]
-
-    cuboid.append(visii.vec3(centroid_obj[0], centroid_obj[1], centroid_obj[2]))
-
-    for i_p, p in enumerate(cuboid):
-        child_transform = visii.transform.create(f"{name}_cuboid_{i_p}")
-        child_transform.set_position(p)
-        child_transform.set_scale(visii.vec3(0.3))
-        child_transform.set_parent(obj.get_transform())
-        if debug:
-            visii.entity.create(
-                name=f"{name}_cuboid_{i_p}",
-                mesh=visii.mesh.create_sphere(f"{name}_cuboid_{i_p}"),
-                transform=child_transform,
-                material=visii.material.create(f"{name}_cuboid_{i_p}"),
-            )
-
-    for i_v, v in enumerate(cuboid):
-        cuboid[i_v] = [v[0], v[1], v[2]]
-
-    return cuboid
-
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -94,8 +41,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--models",
-        default="../3d_models/YCB_models",
-        help="path to the 3D grocery models",
+        default="../3d_models/YCB_models/003_cracker_box",
+        help="path to the 3D grocery models. ", # TO-DO: Add note in help message mentioning that this can either be to one model or multiple
     )
     parser.add_argument("--outf", default="output", help="where to put the data")
     parser.add_argument(
@@ -103,9 +50,6 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--cuboid", action="store_true", help="use cuboid to compute the ADD"
-    )
-    parser.add_argument(
-        "--show", action="store_true", help="show the graph at the end. "
     )
 
     opt = parser.parse_args()
@@ -162,7 +106,7 @@ if __name__ == "__main__":
             with open(os.path.join(opt.data_prediction, pf, gt_file)) as json_file:
                 gu_json = json.load(json_file)
 
-            objects_gt = []  # name obj, pose
+            objects_gt = []  # name of obj, pose
 
             for obj in gt_json["objects"]:
 
