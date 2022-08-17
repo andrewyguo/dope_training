@@ -3,7 +3,7 @@ downscale_height: 540      # if the input image is larger than this, scale it do
 
 # Type of neural network architecture
 architectures: {
-    '003_cracker_box_16k':"dope",
+    '003_cracker_box':"dope",
     # 'pudding':"dope",
     # 'alphabet_soup':'resnet_simple',   
 }
@@ -11,7 +11,7 @@ architectures: {
 
 # Cuboid dimension in cm x,y,z
 dimensions: {
-    "003_cracker_box_16k": [16.403600692749023,21.343700408935547,7.179999828338623],
+    "003_cracker_box": [16.403600692749023,21.343700408935547,7.179999828338623],
     "gelatin": [8.918299674987793, 7.311500072479248, 2.9983000755310059],
     "meat": [10.164673805236816,8.3542995452880859,5.7600898742675781],
     "mustard": [9.6024150848388672,19.130100250244141,5.824894905090332],
@@ -25,7 +25,7 @@ dimensions: {
 }
 
 class_ids: {
-    "003_cracker_box_16k": 1,
+    "003_cracker_box": 1,
     "gelatin": 2,
     "meat":    3,
     "mustard": 4,
@@ -39,7 +39,7 @@ class_ids: {
 }
 
 draw_colors: {
-    "003_cracker_box_16k": [13, 255, 128],  # green
+    "003_cracker_box": [13, 255, 128],  # green
     "gelatin": [255, 255, 255],  # while
     "meat": [0, 104, 255],  # blue
     "mustard": [217,12, 232],  # magenta
@@ -53,7 +53,7 @@ draw_colors: {
 
 # optional: provide a transform that is applied to the pose returned by DOPE
 model_transforms: {
-   "003_cracker_box_16k": [[ 0,  0,  1,  0],
+   "003_cracker_box": [[ 0,  0,  1,  0],
                [ 0, -1,  0,  0],
                [ 1,  0,  0,  0],
                [ 0,  0,  0,  1]]

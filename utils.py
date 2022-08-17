@@ -137,10 +137,16 @@ def loadimages_inference(root, extensions):
         path,
     ):
         for ext in extensions:
-            for imgpath in glob.glob(path + "/*.{}".format(ext.replace(".", ""))):
-                if exists(imgpath):
+            for file in os.listdir(path):
+                imgpath = os.path.join(path, file)
+                if imgpath.endswith(ext) and exists(imgpath):
                     imgs.append(imgpath)
                     imgsname.append(imgpath.replace(root, ""))
+
+            # for imgpath in glob.glob(path + "/*.{}".format(ext.replace(".", ""))):
+            #     if exists(imgpath):
+            #         imgs.append(imgpath)
+            #         imgsname.append(imgpath.replace(root, ""))
 
     def explore(path):
         if not os.path.isdir(path):
@@ -150,12 +156,12 @@ def loadimages_inference(root, extensions):
             for o in os.listdir(path)
             if os.path.isdir(os.path.join(path, o))
         ]
-        if len(folders) > 0:
-            for path_entry in folders:
+        # if len(folders) > 0:
+        for path_entry in folders:
 
-                explore(path_entry)
-        else:
-            add_imgs(path)
+            explore(path_entry)
+        # else:
+        add_imgs(path)
 
     explore(root)
 

@@ -177,7 +177,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--data",
         required=True,
-        help="folder for data images to load, *.png, *.jpeg, *jpg",
+        help="folder for data images to load.",
     )
     parser.add_argument(
         "--config",
@@ -206,7 +206,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--class_name",
-        default="003_cracker_box_16k",
+        default="003_cracker_box",
         help="Name of class to run detections on.",
     )
 
