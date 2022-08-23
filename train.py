@@ -58,7 +58,7 @@ conf_parser.add_argument("-c", "--config", help="Specify config file", metavar="
 parser = argparse.ArgumentParser()
 
 # Specify Training Data
-parser.add_argument("--data", nargs="+", required=True, help="path to training data")
+parser.add_argument("--data", nargs="+", help="Path to training data")
 parser.add_argument(
     "--use_s3", action="store_true", help="Use s3 buckets for training data"
 )
@@ -141,6 +141,12 @@ parser.set_defaults(**defaults)
 parser.add_argument("--option")
 opt = parser.parse_args(remaining_argv)
 
+# Validate Arguments 
+if opt.use_s3 and opt.train_buckets is None:
+    raise ValueError("--train_buckets field must be specified if training with data from s3 bucket.")
+
+if not opt.use_s3 and opt.data is None:
+    raise ValueError("--data field must be specified.")
 
 os.makedirs(opt.outf, exist_ok=True)
 
