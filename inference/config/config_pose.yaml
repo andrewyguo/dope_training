@@ -1,62 +1,41 @@
 input_is_rectified: True   # Whether the input image is rectified (strongly suggested!)
-downscale_height: 540      # if the input image is larger than this, scale it down to this pixel height
-
-# Type of neural network architecture
-architectures: {
-    '003_cracker_box':"dope",
-    # 'pudding':"dope",
-    # 'alphabet_soup':'resnet_simple',   
-}
-
+downscale_height: 512      # if the input image is larger than this, scale it down to this pixel height
 
 # Cuboid dimension in cm x,y,z
 dimensions: {
     "003_cracker_box": [16.403600692749023,21.343700408935547,7.179999828338623],
-    "gelatin": [8.918299674987793, 7.311500072479248, 2.9983000755310059],
-    "meat": [10.164673805236816,8.3542995452880859,5.7600898742675781],
-    "mustard": [9.6024150848388672,19.130100250244141,5.824894905090332],
-    "soup": [6.7659378051757813,10.185500144958496,6.771425724029541],
-    "sugar": [9.267730712890625,17.625339508056641,4.5134143829345703],
-    "bleach": [10.267730712890625,26.625339508056641,7.5134143829345703],
-    "peg_hole": [12.6,3.9,12.6],
-    'cube_red':[5,5,5],
-    'pudding':[49.47199821472168, 29.923000335693359, 83.498001098632812],
-    'alphabet_soup':[8.3555002212524414, 7.1121001243591309, 6.6055998802185059]
+    "009_gelatin_box": [8.918299674987793, 7.311500072479248, 2.9983000755310059],
+    "010_potted_meat_can": [10.164673805236816,8.3542995452880859,5.7600898742675781],
+    "006_mustard_bottle": [9.6024150848388672,19.130100250244141,5.824894905090332],
+    "005_tomato_soup_can": [6.7659378051757813,10.185500144958496,6.771425724029541],
+    "004_sugar_box": [9.267730712890625,17.625339508056641,4.5134143829345703],
+    "021_bleach_cleanser": [10.267730712890625,26.625339508056641,7.5134143829345703],
+    "071_nine_hole_peg_test": [12.6,3.9,12.6],
+    '008_pudding_box':[49.47199821472168, 29.923000335693359, 83.498001098632812],
 }
 
 class_ids: {
     "003_cracker_box": 1,
-    "gelatin": 2,
-    "meat":    3,
-    "mustard": 4,
-    "soup":    5,
-    "sugar":   6,
-    "bleach":  7,
-    "peg_hole": 8,
-    "cube_red": 9,
-    'pudding': 10,
-    'alphabet_soup': 12,
+    "009_gelatin_box": 2,
+    "010_potted_meat_can":    3,
+    "006_mustard_bottle": 4,
+    "005_tomato_soup_can":    5,
+    "004_sugar_box":   6,
+    "021_bleach_cleanser":  7,
+    "071_nine_hole_peg_test": 8,
+    '008_pudding_box': 10,
 }
 
 draw_colors: {
     "003_cracker_box": [13, 255, 128],  # green
-    "gelatin": [255, 255, 255],  # while
-    "meat": [0, 104, 255],  # blue
-    "mustard": [217,12, 232],  # magenta
-    "soup": [255, 101, 0],  # orange
-    "sugar": [232, 222, 12],  # yellow
-    "bleach": [232, 222, 12],  # yellow
-    "peg_hole": [232, 222, 12],  # yellow
-    "cube_red": [255,0,0],
-    "pudding": [255,0,0],
-}
-
-# optional: provide a transform that is applied to the pose returned by DOPE
-model_transforms: {
-   "003_cracker_box": [[ 0,  0,  1,  0],
-               [ 0, -1,  0,  0],
-               [ 1,  0,  0,  0],
-               [ 0,  0,  0,  1]]
+    "009_gelatin_box": [255, 255, 255],  # while
+    "010_potted_meat_can": [0, 104, 255],  # blue
+    "006_mustard_bottle": [217,12, 232],  # magenta
+    "005_tomato_soup_can": [255, 101, 0],  # orange
+    "004_sugar_box": [232, 222, 12],  # yellow
+    "021_bleach_cleanser": [232, 222, 12],  # yellow
+    "071_nine_hole_peg_test": [232, 222, 12],  # yellow
+    "008_pudding_box": [255,0,0],
 }
 
 # Config params for DOPE
