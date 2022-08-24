@@ -21,7 +21,9 @@ def visualize_projected_points(path_img, path_json, path_output, img_name, root)
         projected_cuboid_keypoints = [tuple(pair) for pair in obj["projected_cuboid"]]
         draw.draw_cube(projected_cuboid_keypoints)
 
-    path_output = os.path.join(path_output, img_path.replace(root, "").replace(img_name, "").lstrip("/"))
+    path_output = os.path.join(
+        path_output, img_path.replace(root, "").replace(img_name, "").lstrip("/")
+    )
     os.makedirs(path_output, exist_ok=True)
     img.save(os.path.join(path_output, img_name))
 

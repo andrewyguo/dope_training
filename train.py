@@ -80,7 +80,9 @@ parser.add_argument(
 parser.add_argument(
     "--workers", type=int, help="number of data loading workers", default=8
 )
-parser.add_argument("--batchsize", type=int, default=32, help="input batch size")
+parser.add_argument(
+    "--batchsize", "--batch_size", type=int, default=32, help="input batch size"
+)
 parser.add_argument(
     "--imagesize",
     type=int,
@@ -103,7 +105,12 @@ parser.add_argument(
 )
 parser.add_argument("--manualseed", type=int, help="manual seed")
 parser.add_argument(
-    "--epochs", "--epoch", "-e", type=int, default=60, help="Number of epochs to train for"
+    "--epochs",
+    "--epoch",
+    "-e",
+    type=int,
+    default=60,
+    help="Number of epochs to train for",
 )
 parser.add_argument("--loginterval", type=int, default=100)
 parser.add_argument("--gpuids", nargs="+", type=int, default=[0], help="GPUs to use")
@@ -115,7 +122,7 @@ parser.add_argument(
     help="Extensions for images to use. Can have multiple entries seperated by space. e.g. png jpg",
 )
 parser.add_argument(
-    "--outf", default="output/tmp", help="folder to output images and model checkpoints"
+    "--outf", default="output/weights", help="folder to output images and model checkpoints"
 )
 parser.add_argument("--sigma", default=4, help="keypoint creation sigma")
 
@@ -141,9 +148,11 @@ parser.set_defaults(**defaults)
 parser.add_argument("--option")
 opt = parser.parse_args(remaining_argv)
 
-# Validate Arguments 
+# Validate Arguments
 if opt.use_s3 and opt.train_buckets is None:
-    raise ValueError("--train_buckets field must be specified if training with data from s3 bucket.")
+    raise ValueError(
+        "--train_buckets field must be specified if training with data from s3 bucket."
+    )
 
 if not opt.use_s3 and opt.data is None:
     raise ValueError("--data field must be specified.")

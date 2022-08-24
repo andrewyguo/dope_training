@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--models",
         default="../3d_models/YCB_models/003_cracker_box",
-        help="path to the 3D grocery models. ", # TO-DO: Add note in help message mentioning that this can either be to one model or multiple
+        help="path to the 3D grocery models. ",  # TO-DO: Add note in help message mentioning that this can either be to one model or multiple
     )
     parser.add_argument("--outf", default="output", help="where to put the data")
     parser.add_argument(

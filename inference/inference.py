@@ -192,7 +192,8 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--weights",
-        default="../output",
+        "--weight", "-w",
+        required=True,
         help="Path to weights or folder containing weights. If path is to a folder, then script will run inference with all of the weights in the folder. This could take a while if the set of test images is large.",
     )
 
@@ -205,8 +206,8 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--class_name",
-        default="003_cracker_box",
+        "--object",
+        required=True,
         help="Name of class to run detections on.",
     )
 
@@ -240,7 +241,7 @@ if __name__ == "__main__":
         exit()
 
     for w_i, weight in enumerate(weights):
-        dope_node = DopeNode(config, weight, opt.class_name)
+        dope_node = DopeNode(config, weight, opt.object)
 
         for i in range(len(imgs)):
             print(
