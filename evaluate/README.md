@@ -3,20 +3,6 @@
 This repo contains a simplified version of the **evaluation** script for DOPE.
 The original repo for DOPE [can be found here](https://github.com/NVlabs/Deep_Object_Pose). 
 
-## Installing Dependencies
-***Note***
-
-It is highly recommended to install these dependencies in a virtual environment. You can create and activate a virtual environment by running: 
-```
-python -m venv ./output/dope_training
-source ./output/dope_training/bin/activate
-```
----
-To install the required dependencies, run:
-```
-pip install -r requirements.txt
-```
-
 ## Training
 We use `torch.distributed.launch` to run the training script.
 At minimum, the ``--data`` and ``--object`` flags must be specified if training with data that is stored locally:
