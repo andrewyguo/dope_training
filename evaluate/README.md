@@ -19,8 +19,7 @@ To get a full list of the command line arguments, run `python train.py --help`.
 
 ### Loading Data from `s3`
 There is also an option to train with data that is stored on an `s3` bucket. The script uses `boto3` to load data from `s3`.
-The easiest way to configure credentials with `boto3` is with a config file, which you can [setup using this guide]
-(https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#aws-config-file).
+The easiest way to configure credentials with `boto3` is with a config file, which you can [setup using this guide](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#aws-config-file).
 
 When training with data from `s3`, be sure to specify the ``--use_s3`` flag and also the ``--train_buckets`` flag that indicates which buckets to use for training.
 Below is a sample command to run the training script while using data from `s3`.
