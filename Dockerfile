@@ -1,7 +1,6 @@
 FROM nvcr.io/nvidia/pytorch:22.07-py3
 
 RUN git clone https://github.com/andrewyguo/dope_training.git \
-&& cd dope_training \
 # Note, installing manually instead of using pip install -r requirements.txt because 
 # the base PyTorch container already has some dependencies installed. Installing using 
 # requirements.txt will cause circular dependency issues.
@@ -9,11 +8,14 @@ RUN git clone https://github.com/andrewyguo/dope_training.git \
 && pip install --no-input boto3 \
 && pip install --no-input albumentations \
 && pip install --no-input opencv_python==4.5.4.60 \
-&& apt-get update && apt-get install -y libgl1 
+&& apt-get update \
+&& export DEBIAN_FRONTEND=noninteractive \ 
+&& apt-get install s3cmd -y \
+&& apt-get install -y libgl1 
 
 WORKDIR ~/dope_training
 
-# Uncomment if using s3 
+# Uncomment and fill in if using s3 
 # RUN mkdir ~/.aws \
 # && echo "[default]" >> ~/.aws/config \
 # && echo "aws_access_key_id = <YOUR_USER_NAME>" >> ~/.aws/config \
