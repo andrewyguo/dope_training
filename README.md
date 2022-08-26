@@ -39,11 +39,13 @@ There is also an option to train with data that is stored on an `s3` bucket. The
 The easiest way to configure credentials with `boto3` is with a config file, which you can [setup using this guide](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#aws-config-file).
 
 When training with data from `s3`, be sure to specify the ``--use_s3`` flag and also the ``--train_buckets`` flag that indicates which buckets to use for training.
-Note that multiple buckets can be specified with the `--train_buckets` flag.
+Note that multiple buckets can be specified with the `--train_buckets` flag. 
+
+In addition, the `--endpoint` must be specified in order to retrieve data from an `s3` bucket. 
 
 Below is a sample command to run the training script while using data from `s3`.
 ```
-python -m torch.distributed.launch --nproc_per_node=1 train.py --use_s3 --train_buckets BUCKET_1 BUCKET_2 --object CLASS_OF_OBJECT
+python -m torch.distributed.launch --nproc_per_node=1 train.py --use_s3 --train_buckets BUCKET_1 BUCKET_2 --endpoint ENDPOINT_URL --object CLASS_OF_OBJECT
 ```
 
 ### Multi-GPU Training
