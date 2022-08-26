@@ -3,56 +3,31 @@
 This repo contains a simplified version of the **evaluation** script for DOPE.
 The original repo for DOPE [can be found here](https://github.com/NVlabs/Deep_Object_Pose). 
 
-## Installing Dependencies
-***Note***
+## Running Evaluation
 
-It is highly recommended to install these dependencies in a virtual environment. You can create and activate a virtual environment by running: 
+After running inference with trained model weights, you can measure the performance of the model.
+
+Below is an example of running the evaluation script:
 ```
-python -m venv ./output/dope_training
-source ./output/dope_training/bin/activate
+python evaluate.py --data_prediction ../inference/output --data ../sample_data 
 ```
----
-To install the required dependencies, run:
-```
-pip install -r requirements.txt
-```
+## Arguments 
+### `--data`:
+Path to groundtruth data for the predictions that you want to evaluate. 
 
-## Training
-We use `torch.distributed.launch` to run the training script.
-At minimum, the ``--data`` and ``--object`` flags must be specified if training with data that is stored locally:
-```
-python -m torch.distributed.launch --nproc_per_node=1 train.py --data PATH_TO_DATA --object CLASS_OF_OBJECT
-```
-The ``--data`` flag specifies the path to the training data. There can be multiple paths that are passed in. 
+### `--data_prediction`:
+Path to predictions that were outputted from running inference. To support the evaluation of multiple sets of weights at once, this path can point to a folder containing the **outputs of multiple inference results**. 
 
-The ``--object`` flag specifies the name of the object to train the DOPE model on.
-Although multiple objects can be passed in, DOPE is designed to be trained for a specific object. For best results, only specify one object.
-The name of this object must match the `"class"` field in groundtruth `.json` files.
+### `--models`: 
+Path to 3D model files. See the sample folder `YCB_models` for reference on what needs to be included. 
+These models are loaded before running evaluation and are rendered to compute the 3D error between the predicted results and ground truth. 
 
-To get a full list of the command line arguments, run `python train.py --help`.
+If you trained DOPE on a new object and want to evaluate its performance, make sure to include the 3D model files in a folder that matches `"class_name"` in the ground truth `.json` file. 
 
-### Loading Data from `s3`
-There is also an option to train with data that is stored on an `s3` bucket. The script uses `boto3` to load data from `s3`.
-The easiest way to configure credentials with `boto3` is with a config file, which you can [setup using this guide]
-(https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#aws-config-file).
+Multiple models can be loaded at once as the script will recursively search for any 3D models in the folder specified in `--models`.
 
-When training with data from `s3`, be sure to specify the ``--use_s3`` flag and also the ``--train_buckets`` flag that indicates which buckets to use for training.
-Below is a sample command to run the training script while using data from `s3`.
-```
-python -m torch.distributed.launch --nproc_per_node=1 train.py --use_s3 --train_buckets BUCKET_1 BUCKET_2 --object CLASS_OF_OBJECT
-```
+### `--adds`:
+To be added.
 
-### Multi-GPU Training
-
-To run on multi-GPU machines, set `--nproc_per_node=<NUM_GPUs>`. In addition, reduce the number of epochs by a factor of the number of GPUs you have.
-For example, when running on an 8-GPU machine, setting ``--epochs 5`` is equivalent to running `40` epochs on a single GPU machine.
-
-## Common Issues
-
-1. If you notice you are running out of memory when training, reduce the batch size by specifying a smaller ``--batchsize`` value. By default, this value is `32`.
-2. If you are running into dependency issues when installing, 
-you can try to install the version specific dependencies that are commented out in `requirements.txt`. Be sure to do this in a virtual environment.
-
-## License
-
-Copyright (C) 2018 NVIDIA Corporation. All rights reserved. Licensed under the [CC BY-NC-SA 4.0 license](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+### `--cuboid`:
+To be added.

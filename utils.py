@@ -179,7 +179,7 @@ class CleanVisiiDopeLoader(data.Dataset):
         debug=False,
         use_s3=False,
         buckets=[],
-        endpoint_url="https://pbss.s8k.io",
+        endpoint_url=None,
     ):
         ###################
         self.path_dataset = path_dataset

@@ -18,7 +18,6 @@ import math
 from scipy import spatial
 
 import simplejson as json
-import pickle
 import visii
 import csv
 
@@ -36,15 +35,15 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--data",
-        default="../inference/output/",
+        default="../sample_data/",
         help="path to ground truth data.",
     )
     parser.add_argument(
         "--models",
-        default="../3d_models/YCB_models/003_cracker_box",
-        help="path to the 3D grocery models. ",  # TO-DO: Add note in help message mentioning that this can either be to one model or multiple
+        default="../3d_models/YCB_models/",
+        help="path to the 3D grocery models. ",  
     )
-    parser.add_argument("--outf", default="output", help="where to put the data")
+    parser.add_argument("--outf", default="output", help="where to put the results.")
     parser.add_argument(
         "--adds", action="store_true", help="run ADDS, this might take a while"
     )

@@ -68,6 +68,7 @@ parser.add_argument(
     default=[],
     help="s3 buckets containing training data. Can list multiple buckets separated by a space.",
 )
+parser.add_argument("--endpoint", type=str, default=None)
 
 # Specify Training Object
 parser.add_argument(
@@ -149,9 +150,9 @@ parser.add_argument("--option")
 opt = parser.parse_args(remaining_argv)
 
 # Validate Arguments
-if opt.use_s3 and opt.train_buckets is None:
+if opt.use_s3 and (opt.train_buckets is None or opt.endpoint is None):
     raise ValueError(
-        "--train_buckets field must be specified if training with data from s3 bucket."
+        "--train_buckets and --endpoint must be specified if training with data from s3 bucket."
     )
 
 if not opt.use_s3 and opt.data is None:
@@ -219,6 +220,7 @@ train_dataset = CleanVisiiDopeLoader(
     objects=opt.object,
     use_s3=opt.use_s3,
     buckets=opt.train_buckets,
+    endpoint_url=opt.endpoint,
 )
 trainingdata = torch.utils.data.DataLoader(
     train_dataset,
