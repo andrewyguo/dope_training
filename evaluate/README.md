@@ -27,7 +27,9 @@ If you trained DOPE on a new object and want to evaluate its performance, make s
 Multiple models can be loaded at once as the script will recursively search for any 3D models in the folder specified in `--models`.
 
 ### `--adds`:
-To be added.
+The average distance computed using the closest point distance between the predicted pose and the ground truth pose.
+This takes a while to compute. If you are only looking for a fast approximation, use ``--cuboid``.
 
 ### `--cuboid`:
-To be added.
+Computes average distance using the 8 cuboid points of the 3D models.
+It is much faster than ``--adds`` but is only an approximation for the metric. It should be used for testing purposes.

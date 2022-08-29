@@ -53,6 +53,12 @@ python -m torch.distributed.launch --nproc_per_node=1 train.py --use_s3 --train_
 To run on multi-GPU machines, set `--nproc_per_node=<NUM_GPUs>`. In addition, reduce the number of epochs by a factor of the number of GPUs you have.
 For example, when running on an 8-GPU machine, setting ``--epochs 5`` is equivalent to running `40` epochs on a single GPU machine.
 
+## Debugging 
+There is an option to visualize the `projected_cuboid_points` in the ground truth file. To do so, run:
+```
+python debug.py --data PATH_TO_IMAGES
+```
+
 ## Common Issues
 
 1. If you notice you are running out of memory when training, reduce the batch size by specifying a smaller ``--batchsize`` value. By default, this value is `32`.
