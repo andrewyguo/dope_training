@@ -97,11 +97,6 @@ parser.add_argument(
     "--net_path", default=None, help="path to net (to continue training)"
 )
 parser.add_argument(
-    "--network",
-    default="dope",
-    help="Select which network to train. Choose between: [dope, full, boundary, mobile]",
-)
-parser.add_argument(
     "--namefile", default="epoch", help="name to put on the file of the save weightss"
 )
 parser.add_argument("--manualseed", type=int, help="manual seed")

@@ -50,6 +50,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--cuboid", action="store_true", help="use cuboid to compute the ADD"
     )
+    parser.add_argument(
+        "--thresholds",
+        nargs="+",
+        required=True,
+        default=[0.02, 0.04, 0.06, 0.08, 0.10],
+        help="Thresholds to compute accuracy for.",
+    )
 
     opt = parser.parse_args()
 
@@ -67,8 +74,6 @@ if __name__ == "__main__":
     print(f"Number of Ground Truth Data : {len(data_truth)}")
     print(f"Number of Prediction Folders: {len(prediction_folders)}")
 
-    # Thresholds for ADD Calculations
-    thresholds = [0.02, 0.04, 0.06, 0.08, 0.10]
 
     # Make output directory if it does not exist
     os.makedirs(os.path.join(opt.outf), exist_ok=True)
@@ -79,7 +84,7 @@ if __name__ == "__main__":
 
     # Write Header Row
     csv_writer.writerow(["--cuboid", opt.cuboid, "--adds", opt.adds])
-    csv_writer.writerow(["Weights", "Object", "Total AUC"] + thresholds)
+    csv_writer.writerow(["Weights", "Object", "Total AUC"] + opt.thresholds)
 
     for pf_i, pf in enumerate(prediction_folders):
         adds_objects = {}
@@ -314,7 +319,7 @@ if __name__ == "__main__":
         for name in adds_objects:
 
             auc_thresh = calculate_auc(
-                thresholds=thresholds,
+                thresholds=opt.thresholds,
                 add_list=np.array(adds_objects[name]),
                 total_objects=count_by_object[name],
             )
