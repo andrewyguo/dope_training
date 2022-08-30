@@ -1,5 +1,7 @@
 FROM nvcr.io/nvidia/pytorch:22.07-py3
 
+COPY drivers/* /usr/lib/x86_64-linux-gnu/
+
 RUN git clone https://github.com/andrewyguo/dope_training.git \
 # Note, installing manually instead of using pip install -r requirements.txt because 
 # the base PyTorch container already has some dependencies installed. Installing using 

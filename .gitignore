@@ -2,3 +2,4 @@ output/*
 **__pycache__**
 inference/output/*
 evaluate/output/*
+docker/drivers/*
