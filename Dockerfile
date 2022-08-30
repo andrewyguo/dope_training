@@ -7,13 +7,16 @@ RUN git clone https://github.com/andrewyguo/dope_training.git \
 && pip install --no-input tensorboardX \
 && pip install --no-input boto3 \
 && pip install --no-input albumentations \
+&& pip install --no-input pyrr \
+&& pip install --no-input simplejson \
+&& pip install --no-input visii \
 && pip install --no-input opencv_python==4.5.4.60 \
 && apt-get update \
 && export DEBIAN_FRONTEND=noninteractive \ 
 && apt-get install s3cmd -y \
 && apt-get install -y libgl1 
 
-WORKDIR ~/dope_training
+WORKDIR /workspace/dope_training
 
 # Uncomment and fill in if using s3 
 # RUN mkdir ~/.aws \

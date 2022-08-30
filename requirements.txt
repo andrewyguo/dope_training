@@ -36,6 +36,8 @@ urllib3
 pyrr
 simplejson
 
+visii
+
 ## If running into dependency issues, install the version-specific requirements below in a virtual environment
 # albumentations==1.2.1
 # boto3==1.24.58
