@@ -41,7 +41,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--models",
         default="../3d_models/YCB_models/",
-        help="path to the 3D grocery models. ",  
+        help="path to the 3D grocery models. ",
     )
     parser.add_argument("--outf", default="output", help="where to put the results.")
     parser.add_argument(
@@ -73,7 +73,6 @@ if __name__ == "__main__":
 
     print(f"Number of Ground Truth Data : {len(data_truth)}")
     print(f"Number of Prediction Folders: {len(prediction_folders)}")
-
 
     # Make output directory if it does not exist
     os.makedirs(os.path.join(opt.outf), exist_ok=True)

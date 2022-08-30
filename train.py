@@ -118,7 +118,9 @@ parser.add_argument(
     help="Extensions for images to use. Can have multiple entries seperated by space. e.g. png jpg",
 )
 parser.add_argument(
-    "--outf", default="output/weights", help="folder to output images and model checkpoints"
+    "--outf",
+    default="output/weights",
+    help="folder to output images and model checkpoints",
 )
 parser.add_argument("--sigma", default=4, help="keypoint creation sigma")
 

@@ -192,7 +192,8 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--weights",
-        "--weight", "-w",
+        "--weight",
+        "-w",
         required=True,
         help="Path to weights or folder containing weights. If path is to a folder, then script will run inference with all of the weights in the folder. This could take a while if the set of test images is large.",
     )
