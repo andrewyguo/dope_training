@@ -9,9 +9,6 @@ if __name__ == "__main__":
 
     parser.add_argument("--endpoint", "--endpoint_url", type=str, required=True)
     parser.add_argument(
-        "--batchsize", "--batch_size", type=int, default=32, help="input batch size"
-    )
-    parser.add_argument(
         "--train_buckets",
         nargs="+",
         help="s3 buckets containing training data. Can list multiple buckets separated by a space.",
@@ -24,15 +21,6 @@ if __name__ == "__main__":
         required=True
     )
     parser.add_argument(
-        "--num_gpus", type=int, help="number of GPUs to be used in training.", default=1
-    )
-    parser.add_argument(
-        "--epochs",
-        type=int,
-        default=60,
-        help="Number of epochs to train for",
-    )
-    parser.add_argument(
         "--object",
         required=True,
         help='Object to train network for. Must match "class" field in groundtruth .json file. For best performance, only put one object of interest.',
@@ -42,9 +30,23 @@ if __name__ == "__main__":
         required=True,
         help="Bucket that stores inference data.",
     )
+    parser.add_argument(
+        "--num_gpus", type=int, help="number of GPUs to be used in training.", default=1
+    )
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=60,
+        help="Number of epochs to train for",
+    )
+    parser.add_argument(
+        "--batchsize", "--batch_size", type=int, default=32, help="input batch size"
+    )
 
     opt = parser.parse_args()
     opt.train_buckets = " ".join(opt.train_buckets)
+
+    # Run Training 
     train_command = ["python", "-m", "torch.distributed.launch", f"--nproc_per_node={opt.num_gpus}", "train.py"]
     train_command += ["--use_s3"]
     train_command += ["--endpoint", f"{opt.endpoint}"]
@@ -53,35 +55,36 @@ if __name__ == "__main__":
     train_command += ["--batchsize", f"{opt.batchsize}"]
     # 1 epoch on n GPUs is equivalent to n epochs on 1 GPU
     train_command += ["--epochs", f"{opt.epochs // opt.num_gpus }"]
-    # train_command.append(f"--train_buckets {opt.train_buckets}")
-    # train_command.append(f"--object {opt.object}")
-    # train_command.append(f"--batchsize {opt.batchsize}")
-    # train_command.append(f"--epochs {opt.epochs // opt.num_gpus}") 
 
-    print(train_command)
-    subprocess.call(train_command)
+    subprocess.run(train_command)
     
-    subprocess.run("mkdir output/inference_data")
-    subprocess.run(f"s3cmd sync s3://{opt.inference_data} output/inference_data")
+    # copy inference data locally 
+    subprocess.run(["mkdir", "sample_data/inference_data"])
+    subprocess.run(["s3cmd", "sync", f"s3://{opt.inference_bucket}", "sample_data/inference_data"])
 
-    subprocess.call("cd inference/")
-    inference_command = ["python inference/inference.py"]
-    inference_command.append("--weights output/weights")
-    inference_command.append("--data output/inference_data")
-    inference_command.append(f"--object {opt.object}")
+    # Run Inference 
+    subprocess.run(["cd", "inference/"])
 
-    subprocess.call(inference_command)
+    inference_command = ["python", "inference.py"]
+    inference_command += ["--weights", "../output/weights"]
+    inference_command += ["--data", "../sample_data/inference_data"]
+    inference_command += ["--object", f"{opt.object}"]
 
-    subprocess.call("cd ../evaluate/")
-    evaluate_command = ["python evaluate.py"]
-    evaluate_command.append("--data_prediction inference/output")
-    evaluate_command.append("--data output/inference_data")
-    evaluate_command.append("--outf output/")
-    evaluate_command.append("--cuboid")
+    subprocess.run(inference_command)
 
-    subprocess.call(evaluate_command)
+    # Run Evaluate 
+    subprocess.run(["cd", "../evaluate/"])
 
-    subprocess.call("cd ../")
-    subprocess.call(f"s3cmd mb s3://{opt.output_bucket}")
-    subprocess.call(f"s3cmd sync output/ s3://{opt.output_bucket}")
+    evaluate_command = ["python", "evaluate.py"]
+    evaluate_command += ["--data_prediction", "../inference/output"]
+    evaluate_command += ["--data", "../sample_data/inference_data"]
+    evaluate_command += ["--outf", "../output"]
+    evaluate_command += ["--cuboid"]
+
+    subprocess.run(evaluate_command)
+
+    # Upload Results to s3
+    subprocess.run(["cd", "../"])
+    subprocess.run(f"s3cmd mb s3://{opt.output_bucket}".split(" "))
+    subprocess.run(f"s3cmd sync output/ s3://{opt.output_bucket}".split(" "))
     
