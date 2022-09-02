@@ -44,7 +44,7 @@ if __name__ == "__main__":
     )
 
     opt = parser.parse_args()
-
+    opt.train_buckets = " ".join(opt.train_buckets)
     train_command = ["python", "-m", "torch.distributed.launch", f"--nproc_per_node={opt.num_gpus}", "train.py"]
     train_command += ["--use_s3"]
     train_command += ["--endpoint", f"{opt.endpoint}"]
