@@ -9,16 +9,11 @@ Contains the following classes:
 """
 
 import time
-import json
-import os, shutil
+
 import sys
-import traceback
 from os import path
-import threading
-from threading import Thread
 
 import numpy as np
-import cv2
 
 import torch
 import torch.nn as nn
@@ -26,10 +21,6 @@ import torchvision.transforms as transforms
 from torch.autograd import Variable
 import torchvision.models as models
 
-from scipy import ndimage
-import scipy
-import scipy.ndimage as ndimage
-import scipy.ndimage.filters as filters
 from scipy.ndimage.filters import gaussian_filter
 from scipy import optimize
 
@@ -268,10 +259,8 @@ class ModelData(object):
         """Loads network model from disk with given path"""
         model_loading_start_time = time.time()
         print("Loading DOPE model '{}'...".format(path))
-        if self.architecture == "dope":
-            net = DopeNetwork()
-        else:
-            net = ResnetSimple()
+        net = DopeNetwork()
+
         net = torch.nn.DataParallel(net, [0]).cuda()
         net.load_state_dict(torch.load(path))
         net.eval()
