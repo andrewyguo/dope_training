@@ -53,6 +53,7 @@ if __name__ == "__main__":
     train_command.append(f"--batchsize {opt.batchsize}")
     train_command.append(f"--epochs {opt.epochs // opt.num_gpus}") # 1 epoch on n GPUs is equivalent to n epochs on 1 GPU
 
+    print(train_command)
     subprocess.call(train_command)
     
     subprocess.run("mkdir output/inference_data")
