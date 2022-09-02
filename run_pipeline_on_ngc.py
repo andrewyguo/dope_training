@@ -63,17 +63,17 @@ if __name__ == "__main__":
     subprocess.run(["s3cmd", "sync", f"s3://{opt.inference_bucket}", "sample_data/inference_data"])
 
     # Run Inference 
-    subprocess.run(["cd", "inference/"])
+    # subprocess.run(["cd", "inference/"])
 
     inference_command = ["python", "inference.py"]
     inference_command += ["--weights", "../output/weights"]
     inference_command += ["--data", "../sample_data/inference_data"]
     inference_command += ["--object", f"{opt.object}"]
 
-    subprocess.run(inference_command)
+    subprocess.run(inference_command, cwd="./inference")
 
     # Run Evaluate 
-    subprocess.run(["cd", "../evaluate/"])
+    # subprocess.run([])
 
     evaluate_command = ["python", "evaluate.py"]
     evaluate_command += ["--data_prediction", "../inference/output"]
@@ -81,10 +81,10 @@ if __name__ == "__main__":
     evaluate_command += ["--outf", "../output"]
     evaluate_command += ["--cuboid"]
 
-    subprocess.run(evaluate_command)
+    subprocess.run(evaluate_command, cwd="./evaluate")
 
     # Upload Results to s3
-    subprocess.run(["cd", "../"])
+    # subprocess.run(["cd", "../"])
     subprocess.run(f"s3cmd mb s3://{opt.output_bucket}".split(" "))
     subprocess.run(f"s3cmd sync output/ s3://{opt.output_bucket}".split(" "))
     
