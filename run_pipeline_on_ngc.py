@@ -46,12 +46,17 @@ if __name__ == "__main__":
     opt = parser.parse_args()
 
     train_command = ["python", "-m", "torch.distributed.launch", f"--nproc_per_node={opt.num_gpus}", "train.py"]
-    train_command.append("--use_s3")
-    train_command.append(f"--endpoint {opt.endpoint}")
-    train_command.append(f"--train_buckets {opt.train_buckets}")
-    train_command.append(f"--object {opt.object}")
-    train_command.append(f"--batchsize {opt.batchsize}")
-    train_command.append(f"--epochs {opt.epochs // opt.num_gpus}") # 1 epoch on n GPUs is equivalent to n epochs on 1 GPU
+    train_command += ["--use_s3"]
+    train_command += ["--endpoint", f"{opt.endpoint}"]
+    train_command += ["--train_buckets", f"{opt.train_buckets}"]
+    train_command += ["--object", f"{opt.object}"]
+    train_command += ["--batchsize", f"{opt.batchsize}"]
+    # 1 epoch on n GPUs is equivalent to n epochs on 1 GPU
+    train_command += ["--epochs", f"{opt.epochs // opt.num_gpus }"]
+    # train_command.append(f"--train_buckets {opt.train_buckets}")
+    # train_command.append(f"--object {opt.object}")
+    # train_command.append(f"--batchsize {opt.batchsize}")
+    # train_command.append(f"--epochs {opt.epochs // opt.num_gpus}") 
 
     print(train_command)
     subprocess.call(train_command)
