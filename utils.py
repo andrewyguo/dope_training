@@ -78,8 +78,21 @@ def py_ang(A, B=(1, 0)):
 import colorsys, math
 
 
+def append_dot(extensions):
+    res = []
+
+    for ext in extensions:
+        if not ext.startswith("."):
+            res.append(f".{ext}")
+        else:
+            res.append(ext)
+
+    return res
+
+
 def loadimages(root, extensions=["png"]):
     imgs = []
+    extensions = append_dot(extensions)
 
     def add_json_files(
         path,
@@ -90,13 +103,13 @@ def loadimages(root, extensions=["png"]):
                 if (
                     imgpath.endswith(ext)
                     and exists(imgpath)
-                    and exists(imgpath.replace(ext, "json"))
+                    and exists(imgpath.replace(ext, ".json"))
                 ):
                     imgs.append(
                         (
                             imgpath,
                             imgpath.replace(path, "").replace("/", ""),
-                            imgpath.replace(ext, "json"),
+                            imgpath.replace(ext, ".json"),
                         )
                     )
 
@@ -132,6 +145,7 @@ def loadweights(root):
 
 def loadimages_inference(root, extensions):
     imgs, imgsname = [], []
+    extensions = append_dot(extensions)
 
     def add_imgs(
         path,
@@ -143,11 +157,6 @@ def loadimages_inference(root, extensions):
                     imgs.append(imgpath)
                     imgsname.append(imgpath.replace(root, ""))
 
-            # for imgpath in glob.glob(path + "/*.{}".format(ext.replace(".", ""))):
-            #     if exists(imgpath):
-            #         imgs.append(imgpath)
-            #         imgsname.append(imgpath.replace(root, ""))
-
     def explore(path):
         if not os.path.isdir(path):
             return
@@ -156,11 +165,10 @@ def loadimages_inference(root, extensions):
             for o in os.listdir(path)
             if os.path.isdir(os.path.join(path, o))
         ]
-        # if len(folders) > 0:
-        for path_entry in folders:
 
+        for path_entry in folders:
             explore(path_entry)
-        # else:
+
         add_imgs(path)
 
     explore(root)
@@ -175,7 +183,7 @@ class CleanVisiiDopeLoader(data.Dataset):
         objects=None,
         sigma=1,
         output_size=400,
-        extensions=["png", "jpg"],
+        extensions=["png"],
         debug=False,
         use_s3=False,
         buckets=[],
@@ -186,7 +194,7 @@ class CleanVisiiDopeLoader(data.Dataset):
         self.objects_interest = objects
         self.sigma = sigma
         self.output_size = output_size
-        self.extensions = extensions
+        self.extensions = append_dot(extensions)
         self.debug = debug
         ###################
 
@@ -196,7 +204,9 @@ class CleanVisiiDopeLoader(data.Dataset):
 
         if self.use_s3:
             self.session = boto3.Session()
-            self.s3 = self.session.resource("s3", endpoint_url=endpoint_url)
+            self.s3 = self.session.resource(
+                service_name="s3", endpoint_url=endpoint_url
+            )
 
             for bucket_name in buckets:
                 try:
@@ -214,17 +224,17 @@ class CleanVisiiDopeLoader(data.Dataset):
 
                 jsons = set([json for json in bucket_objects if json.endswith(".json")])
                 imgs = [
-                    img for img in bucket_objects if img.endswith(tuple(extensions))
+                    img
+                    for img in bucket_objects
+                    if img.endswith(tuple(self.extensions))
                 ]
 
-                # Ensure that ground truth for image exists
-                imgs = filter(lambda img: img[:-3] + "json" in jsons, imgs)
-
-                for img in imgs:
-                    self.imgs.append(
-                        # (img key, bucket name, json key)
-                        (img, bucket, img[:-3] + "json")
-                    )
+                for ext in self.extensions:
+                    for img in imgs:
+                        # Only add images that have a ground truth file
+                        if img.endswith(ext) and img.replace(ext, ".json") in jsons:
+                            # (img key, bucket name, json key)
+                            self.imgs.append((img, bucket, img.replace(ext, ".json")))
 
         else:
             for path_look in path_dataset:
@@ -232,6 +242,7 @@ class CleanVisiiDopeLoader(data.Dataset):
 
         # np.random.shuffle(self.imgs)
         print("Number of Training Images:", len(self.imgs))
+        print(self.imgs)
 
         if debug:
             print("Debuging will be save in debug/")

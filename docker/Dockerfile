@@ -1,5 +1,6 @@
 FROM nvcr.io/nvidia/pytorch:22.07-py3
 
+# make sure to run ./get_nvidia_libs.sh before running docker build 
 COPY drivers/* /usr/lib/x86_64-linux-gnu/
 
 RUN git clone https://github.com/andrewyguo/dope_training.git \

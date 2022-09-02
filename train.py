@@ -68,7 +68,7 @@ parser.add_argument(
     default=[],
     help="s3 buckets containing training data. Can list multiple buckets separated by a space.",
 )
-parser.add_argument("--endpoint", type=str, default=None)
+parser.add_argument("--endpoint", "--endpoint_url", type=str, default=None)
 
 # Specify Training Object
 parser.add_argument(
