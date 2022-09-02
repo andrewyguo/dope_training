@@ -1,11 +1,12 @@
 FROM nvcr.io/nvidia/pytorch:22.07-py3
 
+# make sure to run ./get_nvidia_libs.sh before running docker build 
 COPY drivers/* /usr/lib/x86_64-linux-gnu/
 
-RUN git clone https://github.com/andrewyguo/dope_training.git \
 # Note, installing manually instead of using pip install -r requirements.txt because 
 # the base PyTorch container already has some dependencies installed. Installing using 
 # requirements.txt will cause circular dependency issues.
+RUN git clone https://github.com/andrewyguo/dope_training.git \
 && pip install --no-input tensorboardX \
 && pip install --no-input boto3 \
 && pip install --no-input albumentations \
