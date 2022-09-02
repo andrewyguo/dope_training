@@ -53,7 +53,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "--thresholds",
         nargs="+",
-        required=True,
         default=[0.02, 0.04, 0.06, 0.08, 0.10],
         help="Thresholds to compute accuracy for.",
     )
