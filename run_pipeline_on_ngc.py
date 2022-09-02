@@ -38,7 +38,7 @@ if __name__ == "__main__":
         help='Object to train network for. Must match "class" field in groundtruth .json file. For best performance, only put one object of interest.',
     )
     parser.add_argument(
-        "--inference_data",
+        "--inference_bucket",
         required=True,
         help="Bucket that stores inference data.",
     )
@@ -55,8 +55,8 @@ if __name__ == "__main__":
 
     subprocess.call(train_command)
     
-    subprocess.call("mkdir output/inference_data")
-    subprocess.call(f"s3cmd sync s3://{opt.inference_data} output/inference_data")
+    subprocess.run("mkdir output/inference_data")
+    subprocess.run(f"s3cmd sync s3://{opt.inference_data} output/inference_data")
 
     subprocess.call("cd inference/")
     inference_command = ["python inference/inference.py"]

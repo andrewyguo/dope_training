@@ -3,3 +3,4 @@ output/*
 inference/output/*
 evaluate/output/*
 docker/drivers/*
+sample_data/inference_data/
