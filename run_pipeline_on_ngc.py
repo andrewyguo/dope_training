@@ -34,13 +34,11 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--object",
-        nargs="+",
         required=True,
-        default=[],
         help='Object to train network for. Must match "class" field in groundtruth .json file. For best performance, only put one object of interest.',
     )
     parser.add_argument(
-        "--inference_data_bucket",
+        "--inference_data",
         required=True,
         help="Bucket that stores inference data.",
     )
