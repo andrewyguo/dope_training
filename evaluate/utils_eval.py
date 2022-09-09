@@ -16,7 +16,7 @@ def create_obj(
     if path_obj in create_obj.meshes:
         obj_mesh = create_obj.meshes[path_obj]
     else:
-        obj_mesh = visii.mesh.create_from_obj(name, path_obj)
+        obj_mesh = visii.mesh.create_from_file(name, path_obj)
         create_obj.meshes[path_obj] = obj_mesh
 
     obj_entity = visii.entity.create(
@@ -37,7 +37,7 @@ def create_obj(
         if path_tex in create_obj.textures:
             obj_texture = create_obj.textures[path_tex]
         else:
-            obj_texture = visii.texture.create_from_image(name, path_tex)
+            obj_texture = visii.texture.create_from_file(name, path_tex)
             create_obj.textures[path_tex] = obj_texture
 
         obj_entity.get_material().set_base_color_texture(obj_texture)

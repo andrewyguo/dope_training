@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     opt = parser.parse_args()
 
-    visii.initialize_headless()
+    visii.initialize(headless=True)
 
     # Create Models
     meshes_gt = loadmodels(opt.models, cuboid=opt.cuboid, suffix="_gt")
