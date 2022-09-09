@@ -141,7 +141,7 @@ if args.config:
     config.read([args.config])
     defaults.update(dict(config.items("defaults")))
 
-local_rank = os.environ['LOCAL_RANK']
+local_rank = int(os.environ['LOCAL_RANK'])
 
 parser.set_defaults(**defaults)
 parser.add_argument("--option")
