@@ -131,7 +131,6 @@ parser.add_argument(
     help="Use pretrained weights. Must also specify --net_path.",
 )
 parser.add_argument("--nbupdates", default=None, help="nb max update to network")
-parser.add_argument("--local_rank", type=int)
 
 # Read the config but do not overwrite the args written
 args, remaining_argv = conf_parser.parse_known_args()
@@ -141,6 +140,8 @@ if args.config:
     config = configparser.SafeConfigParser()
     config.read([args.config])
     defaults.update(dict(config.items("defaults")))
+
+local_rank = os.environ['LOCAL_RANK']
 
 parser.set_defaults(**defaults)
 parser.add_argument("--option")
@@ -169,13 +170,13 @@ with open(opt.outf + "/header.txt", "w") as file:
     file.write("seed: " + str(opt.manualseed) + "\n")
 
 
-if opt.local_rank == 0:
+if local_rank == 0:
     writer = SummaryWriter(opt.outf + "/runs/")
 
 random.seed(opt.manualseed)
 
 
-torch.cuda.set_device(opt.local_rank)
+torch.cuda.set_device(local_rank)
 torch.distributed.init_process_group(backend="NCCL", init_method="env://")
 
 torch.manual_seed(opt.manualseed)
@@ -234,7 +235,7 @@ if not trainingdata is None:
 print("Loading Model...")
 
 net = torch.nn.parallel.DistributedDataParallel(
-    net.cuda(), device_ids=[opt.local_rank], output_device=opt.local_rank
+    net.cuda(), device_ids=[local_rank], output_device=local_rank
 )
 
 if opt.pretrained:
@@ -297,7 +298,7 @@ def _runnetwork(epoch, train_loader, syn=False):
         if batch_idx == 0:
             post = "train"
 
-            if opt.local_rank == 0:
+            if local_rank == 0:
 
                 for i_output in range(1):
 
@@ -353,12 +354,12 @@ def _runnetwork(epoch, train_loader, syn=False):
                     len(train_loader.dataset),
                     100.0 * batch_idx / len(train_loader),
                     loss.item(),
-                    opt.local_rank,
+                    local_rank,
                 )
             )
 
     # log the loss values
-    if opt.local_rank == 0:
+    if local_rank == 0:
 
         writer.add_scalar("loss/train_loss", np.mean(loss_avg_to_log["loss"]), epoch)
         writer.add_scalar(
@@ -377,7 +378,7 @@ for epoch in range(1, opt.epochs + 1):
     _runnetwork(epoch, trainingdata)
 
     try:
-        if opt.local_rank == 0:
+        if local_rank == 0:
 
             torch.save(
                 net.state_dict(),
@@ -389,14 +390,14 @@ for epoch in range(1, opt.epochs + 1):
     if not opt.nbupdates is None and nb_update_network > int(opt.nbupdates):
         break
 
-if opt.local_rank == 0:
+if local_rank == 0:
     torch.save(
         net.state_dict(), f"{opt.outf}/net_{opt.namefile}_{str(epoch).zfill(2)}.pth"
     )
 else:
     torch.save(
         net.state_dict(),
-        f"{opt.outf}/net_{opt.namefile}_{str(epoch).zfill(2)}_rank_{opt.local_rank}.pth",
+        f"{opt.outf}/net_{opt.namefile}_{str(epoch).zfill(2)}_rank_{local_rank}.pth",
     )
 
 print("end:", datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
