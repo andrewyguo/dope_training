@@ -136,11 +136,14 @@ def loadweights(root):
     if root.endswith(".pth") and os.path.isfile(root):
         return [root]
     else:
-        return [
+        weights = [
             os.path.join(root, f)
             for f in os.listdir(root)
             if os.path.isfile(os.path.join(root, f)) and f.endswith(".pth")
         ]
+
+        weights.sort()
+        return weights 
 
 
 def loadimages_inference(root, extensions):

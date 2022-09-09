@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/pytorch:22.07-py3
+FROM nvcr.io/nvidia/pytorch:21.02-py3
 
 # make sure to run ./get_nvidia_libs.sh before running docker build 
 COPY drivers/* /usr/lib/x86_64-linux-gnu/

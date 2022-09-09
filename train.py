@@ -123,6 +123,7 @@ parser.add_argument(
     help="folder to output images and model checkpoints",
 )
 parser.add_argument("--sigma", default=4, help="keypoint creation sigma")
+parser.add_argument("--local_rank", type=int)
 
 parser.add_argument("--save", action="store_true", help="save a batch and quit")
 parser.add_argument(
@@ -141,11 +142,12 @@ if args.config:
     config.read([args.config])
     defaults.update(dict(config.items("defaults")))
 
-local_rank = int(os.environ['LOCAL_RANK'])
 
 parser.set_defaults(**defaults)
 parser.add_argument("--option")
 opt = parser.parse_args(remaining_argv)
+
+local_rank = opt.local_rank
 
 # Validate Arguments
 if opt.use_s3 and (opt.train_buckets is None or opt.endpoint is None):
