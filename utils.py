@@ -140,7 +140,7 @@ def loadweights(root):
             os.path.join(root, f)
             for f in os.listdir(root)
             if os.path.isfile(os.path.join(root, f)) and f.endswith(".pth")
-        ]
+        ].sort()
 
 
 def loadimages_inference(root, extensions):

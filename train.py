@@ -123,6 +123,7 @@ parser.add_argument(
     help="folder to output images and model checkpoints",
 )
 parser.add_argument("--sigma", default=4, help="keypoint creation sigma")
+parser.add_argument("--local_rank", help="Local Rank")
 
 parser.add_argument("--save", action="store_true", help="save a batch and quit")
 parser.add_argument(
@@ -141,7 +142,7 @@ if args.config:
     config.read([args.config])
     defaults.update(dict(config.items("defaults")))
 
-local_rank = int(os.environ['LOCAL_RANK'])
+local_rank = opt.local_rank
 
 parser.set_defaults(**defaults)
 parser.add_argument("--option")
