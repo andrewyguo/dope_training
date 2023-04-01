@@ -44,9 +44,9 @@ if __name__ == "__main__":
 
     opt = parser.parse_args()
 
-    imgs = loadimages(opt.data)
+    imgs = sorted(loadimages(opt.data, extensions=["jpg", "png"]))
 
     for i, (img_path, img_name, json_path) in enumerate(imgs):
         img_rel_path = img_path.replace(opt.data, "")
-        print(f"Debugging image {img_rel_path} ({i + 1} of {len(imgs)})")
+        print(f"Debugging image {img_rel_path} ({i + 1} of {len(imgs)}) | Outputting to: {opt.outf + '/' + img_rel_path}")
         visualize_projected_points(img_path, json_path, opt.outf, img_name, opt.data)
