@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     opt = parser.parse_args()
 
-    imgs = loadimages(opt.data)
+    imgs = loadimages(opt.data, extensions=["jpg", "png"])
 
     for i, (img_path, img_name, json_path) in enumerate(imgs):
         img_rel_path = img_path.replace(opt.data, "")

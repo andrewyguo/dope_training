@@ -890,7 +890,7 @@ def save_image(tensor, filename, nrow=4, padding=2, mean=None, std=None, save=Tr
     return im, grid
 
 
-from PIL import ImageDraw, Image
+from PIL import ImageDraw, Image, ImageFont
 import json
 
 
@@ -902,6 +902,7 @@ class Draw(object):
         :param im: The image to draw in.
         """
         self.draw = ImageDraw.Draw(im)
+        self.width = im.size[0]
 
     def draw_line(self, point1, point2, line_color, line_width=2):
         """Draws line on image"""
@@ -918,6 +919,11 @@ class Draw(object):
                 point[1] + point_radius,
             ]
             self.draw.ellipse(xy, fill=point_color, outline=point_color)
+
+    def draw_text(self, point, text, text_color):
+        """Draws text on image"""
+        if point is not None:
+            self.draw.text(point, text, fill=text_color, font=ImageFont.truetype("misc/arial.ttf", self.width // 50))
 
     def draw_cube(self, points, color=(0, 255, 0)):
         """
@@ -952,3 +958,8 @@ class Draw(object):
 
         # Draw center
         self.draw_dot(points[8], point_color=color, point_radius=6)
+
+        for i in range(9):
+            self.draw_text(points[i], str(i), (255, 0, 0))
+
+
