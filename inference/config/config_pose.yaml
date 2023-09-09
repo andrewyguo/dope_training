@@ -12,6 +12,7 @@ dimensions: {
     "021_bleach_cleanser": [10.267730712890625,26.625339508056641,7.5134143829345703],
     "071_nine_hole_peg_test": [12.6,3.9,12.6],
     '008_pudding_box':[49.47199821472168, 29.923000335693359, 83.498001098632812],
+    "Ketchup" : [ 14.860799789428711, 4.3368000984191895, 6.4513998031616211 ],
 }
 
 class_ids: {
@@ -24,6 +25,7 @@ class_ids: {
     "021_bleach_cleanser":  7,
     "071_nine_hole_peg_test": 8,
     '008_pudding_box': 10,
+    'Ketchup': 11,
 }
 
 draw_colors: {
@@ -36,10 +38,11 @@ draw_colors: {
     "021_bleach_cleanser": [232, 222, 12],  # yellow
     "071_nine_hole_peg_test": [232, 222, 12],  # yellow
     "008_pudding_box": [255,0,0],
+    "Ketchup": [0x76,0xb9,0x00],          # NVIDIA green
 }
 
 # Config params for DOPE
 thresh_angle: 0.5
-thresh_map: 0.0001
+thresh_map: 0.01
 sigma: 3
-thresh_points: 0.1
+thresh_points: 0.0
